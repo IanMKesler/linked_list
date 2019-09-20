@@ -43,11 +43,54 @@ class LinkedList
     def at(index)
         count = 0
         proc = Proc.new { |node| 
+            return node if count == index
             count += 1
-            return node if count == index+1
         }
         traverse(proc) if @head
         return false
+    end
+
+    def pop
+        length = size
+        count = 0
+        proc = Proc.new { |node|
+            count += 1
+            if count == length-1 
+                temp_link = node.next_node.dup
+                node.next_node.value = nil
+                node.next_node = nil
+                @tail = node
+                return temp_link
+            end                
+        }
+        traverse(proc) if @head
+        return false
+    end
+
+    def contains?(value)
+        proc = Proc.new { |node|
+            return true if node.value == value
+        }
+        traverse(proc) if @head
+        return false
+    end
+
+    def find(value)
+        count = 0
+        proc = Proc.new { |node|
+            return count if node.value == value
+            count += 1
+        }
+        traverse(proc) if @head
+        return nil
+    end
+
+    def to_s
+        proc = Proc.new { |node|
+            print "( #{node.value} ) -> "
+        }
+        traverse(proc) if @head
+        print "nil"
     end
 
 
