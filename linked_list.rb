@@ -93,6 +93,54 @@ class LinkedList
         print "nil"
     end
 
+    def insert_at(value, index)
+        case index
+        when 0 
+            self.prepend(value)
+        when self.size - 1
+            self.append(value)
+        else
+            node_name = create_node(value)
+            count = 0
+            proc = Proc.new { |node|
+                if count == index-1
+                    temp = node.next_node.dup
+                    node.next_node = self.instance_variable_get(node_name)
+                    self.instance_variable_get(node_name).next_node = temp
+                    return true
+                else
+                    count += 1
+                end 
+            }
+            traverse(proc) if @head
+            return false
+        end
+    end
+
+    def remove_at(index)
+        if index == 0
+            @head.value = nil
+            temp = @head.next_node.dup
+            @head.next_node = nil
+            @head = temp
+            return true
+        else
+            count = 0
+            temp = nil
+            proc = Proc.new { |node|
+                if count == index - 1
+                    node.next_node = node.next_node.next_node 
+                elsif count == index
+                    node.value = nil
+                    node.next_node = nil
+                    return true
+                end
+            }
+            traverse(proc) if @head
+            return false
+        end
+    end
+
 
 
     private
